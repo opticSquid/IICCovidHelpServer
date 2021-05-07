@@ -26,7 +26,6 @@ const SaveUser = (req, res, next) => {
   let User = {
     Email: req.body.Email,
     Name: req.body.Name,
-    Role: req.body.Role,
     Password: res.locals.passHash,
   };
   addUser
@@ -37,7 +36,6 @@ const SaveUser = (req, res, next) => {
         res.locals.usertoSend = {
           Email: response.data.Email,
           Name: response.data.Name,
-          Role: response.data.Role,
         };
         next();
       }

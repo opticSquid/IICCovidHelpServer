@@ -7,10 +7,6 @@ let User = new schema({
     unique: true,
   },
   Name: String,
-  Role: {
-    type: String,
-    required: true,
-  },
   Password:{
       type: String,
       required: true

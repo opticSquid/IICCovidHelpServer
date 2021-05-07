@@ -1,37 +1,49 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
-let HeathCentre = new schema({
-  FacilityName: {
+
+let Review = new mongoose.Schema({
+  creator: {
     type: String,
-    required: true,
+    requied: true,
   },
-  CreatorEmail: {
-    type: String,
-    required: true,
-  },
-  Rating:String,
-  Address: {
-    Location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        requied: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
-    },
-    Text: {
+  messege: String,
+});
+
+let HeathCentre = new schema(
+  {
+    FacilityName: {
       type: String,
       required: true,
     },
-  },
-  Beds:{
+    CreatorEmail: {
+      type: String,
+      required: true,
+    },
+    Beds: {
       Normal: String,
       ICU: String,
+    },
+    Oxygen: String,
+    Address: {
+      Location: {
+        type: {
+          type: String,
+          enum: ["Point"],
+          requied: true,
+        },
+        coordinates: {
+          type: [Number],
+          required: true,
+        },
+      },
+      Rating: [Number],
+      verified: Boolean,
+      Reviews: {
+        type: [Review],
+      },
+    },
   },
-  Oxygen:String,
-},{ timestamps: true });
+  { timestamps: true }
+);
 HeathCentre.index({ "Address.Location": "2dsphere" });
 module.exports = mongoose.model("HealthCentre", HeathCentre);
