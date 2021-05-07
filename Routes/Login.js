@@ -2,21 +2,20 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require("../MiddleWares/JWT");
 const findUser = require("../Database/FindUser");
+const addSession = require("../Database/AddSession");
 const login = (req, res, next) => {
   findUser
     .FindUser(req.body.Email)
     .then((response) => {
-      if(response.data!==undefined)
-      {
+      if (response.data !== undefined) {
         console.log("Found user from DB", response);
         // Name and password is passed to next middleware
         res.locals.user = response.data;
         next();
-      }
-      else{
+      } else {
         console.error("Could not find user from DB", response);
         // Name and password is passed to next middleware
-        next('route');
+        next("route");
         res.status(200).json("User doesn't Exist");
       }
     })
@@ -31,30 +30,50 @@ const login = (req, res, next) => {
 };
 const comparepass = async (password, hash) => {
   try {
-      //returns true if matches
+    //returns true if matches
     return await bcrypt.compare(password, hash);
   } catch (error) {
-    console.error("Error while comapring Passwords=>\t",error);
+    console.error("Error while comapring Passwords=>\t", error);
   }
   return false;
 };
 const verifypass = (req, res, next) => {
-    comparepass(req.body.Password, res.locals.user.Password).then((matched)=>{
-        if(matched)
-        {
-            res.locals.usertoSend = {Email: req.body.Email, Name: res.locals.user.Name}
-            next();
-        }
-        else
-        {
-            next('route');
-            res.status(200).json({status: "Password Didn't match"});
-        }
-    }).catch((error)=>{
-        console.error("Error while comparing Passwords", error);
-        next('route');
-        res.status(200).json({status: "Password could not be compared"});
+  comparepass(req.body.Password, res.locals.user.Password)
+    .then((matched) => {
+      if (matched) {
+        res.locals.usertoSend = {
+          Email: req.body.Email,
+          Name: res.locals.user.Name,
+        };
+        next();
+      } else {
+        next("route");
+        res.status(200).json({ status: "Password Didn't match" });
+      }
+    })
+    .catch((error) => {
+      console.error("Error while comparing Passwords", error);
+      next("route");
+      res.status(200).json({ status: "Password could not be compared" });
     });
 };
-router.post("/", login, verifypass, jwt.setJWT);
+
+const startSession = (req, res) => {
+  let activeUser = {
+    Email: req.body.Email,
+    Refresh_Token: res.locals.jwt.refreshToken,
+  };
+  addSession
+    .AddSession(activeUser)
+    .then((response) => {
+      console.log(response);
+      res.status(200).send(res.locals.jwt);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(200).json("Session couldnot be started for the provided user");
+    });
+};
+
+router.post("/", login, verifypass, jwt.setJWT, startSession);
 module.exports = router;

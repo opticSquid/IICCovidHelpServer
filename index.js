@@ -39,6 +39,7 @@ mongoose
     app.use("/slots", require("./Routes/getVaccineSlots"));
     app.use("/signup",require("./Routes/Signup"));
     app.use("/login",require("./Routes/Login"));
+    app.use("/logout",require("./Routes/Logout"));
   }).catch((error)=>{
     console.log("Could not connect to Database, this error occured=>\n",error);
   });

@@ -51,6 +51,8 @@ const SaveUser = (req, res, next) => {
     });
 };
 
-router.post("/", NewUser, SaveUser, jwt.setJWT);
+router.post("/", NewUser, SaveUser, jwt.setJWT, (req,res)=>{
+  res.status(200).send(res.locals.jwt);
+});
 
 module.exports = router;
