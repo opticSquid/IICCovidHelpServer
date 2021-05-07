@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios").default;
 const mongoose = require("mongoose");
 const app = express();
 
@@ -31,20 +30,10 @@ mongoose
   })
   .then((connection) => {
     app.get("/", (req, res) => {
-      let doc = {
-        mobile: req.body.mobile,
-      };
-      axios
-        .post("https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP", doc)
-        .then((response) => {
-          console.log(response.data);
-          res.status(200).json({ m: "Response Sent" });
-        })
-        .catch((err) => {
-          console.log("Couldnot generate OTP for the given number. This error occured=>\n",err);
-        });
+      res.status(200).json({m:"Hello from myBondhu Backend"});
     });
-    app.use("/otp", require("./Routes/OTPconfirm"));
+    app.use("/generateotp",require("./Routes/OTPgenerate"));
+    app.use("/otpconfirm", require("./Routes/OTPconfirm"));
     app.use("/state", require("./Routes/getStates"));
     app.use("/district", require("./Routes/getDistricts"));
     app.use("/slots", require("./Routes/getVaccineSlots"));
