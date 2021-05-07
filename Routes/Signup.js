@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const jwt = require("../MiddleWares/JWT");
 const addUser = require("../Database/NewUser");
 const hashPassword = async (pass) => {
   const saltRounds = 10;
@@ -50,18 +50,7 @@ const SaveUser = (req, res, next) => {
       next("route");
     });
 };
-const setJWT = (req, res) => {
-  const refreshToken = jwt.sign(
-    res.locals.usertoSend,
-    process.env.REFRESHTOKEN
-  );
-  const accessToken = jwt.sign(res.locals.usertoSend, process.env.ACCESSTOKEN, {
-    expiresIn: 900,
-  });
-  res
-    .status(200)
-    .json({ refreshToken: refreshToken, accessToken: accessToken });
-};
-router.post("/", NewUser, SaveUser, setJWT);
+
+router.post("/", NewUser, SaveUser, jwt.setJWT);
 
 module.exports = router;
