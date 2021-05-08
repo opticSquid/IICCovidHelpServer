@@ -11,6 +11,10 @@ let Review = new mongoose.Schema({
 
 let HeathCentre = new schema(
   {
+    uid: {
+      type: String,
+      required: true,
+    },
     FacilityName: {
       type: String,
       required: true,
@@ -25,15 +29,21 @@ let HeathCentre = new schema(
       required: true,
     },
     PhoneNumber: {
-      type: String,
+      type: Number,
       required: true,
       unique: true,
     },
     Beds: {
-      Normal: String,
-      ICU: String,
+      Normal: Number,
+      ICU: Number,
     },
-    Oxygen: String,
+    Oxygen: Number,
+    CovidVaccines: {
+      Available: Boolean,
+      VaccineName: String,
+      Quantity: Number,
+    },
+    Doctors: Number,
     Address: {
       Location: {
         type: {

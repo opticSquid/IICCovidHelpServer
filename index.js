@@ -43,6 +43,7 @@ mongoose
     app.use("/logout", require("./Routes/Logout"));
     app.use("/generatetoken", require("./Routes/generateAccessToken"));
     app.use("/newHealthCentre",require("./Routes/NewHealthCentre"));
+    app.use("/getHealthCentres",require("./Routes/getHealthCentres"));
   })
   .catch((error) => {
     console.log("Could not connect to Database, this error occured=>\n", error);
