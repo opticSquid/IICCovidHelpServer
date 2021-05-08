@@ -19,7 +19,16 @@ let HeathCentre = new schema(
       type: String,
       required: true,
     },
-    PhoneNumber:String,
+    Email: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    PhoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     Beds: {
       Normal: String,
       ICU: String,
@@ -37,11 +46,12 @@ let HeathCentre = new schema(
           required: true,
         },
       },
-      Rating: [Number],
-      verified: Boolean,
-      Reviews: {
-        type: [Review],
-      },
+      StreetAddress: { State: String, District: String, City: String },
+    },
+    Rating: [Number],
+    verified: Boolean,
+    Reviews: {
+      type: [Review],
     },
   },
   { timestamps: true }

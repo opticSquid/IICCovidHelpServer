@@ -14,6 +14,6 @@ const logout = (req, res) => {
     });
 };
 
-router.post("/", verifyjwt.verifyJWT, logout);
+router.delete("/", verifyjwt.verifyJWT, logout);
 
 module.exports = router;

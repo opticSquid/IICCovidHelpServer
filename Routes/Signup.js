@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("../MiddleWares/JWT");
 const addUser = require("../Database/NewUser");
+const addSession = require("../Database/AddSession");
 const hashPassword = async (pass) => {
   const saltRounds = 10;
   const hash = await bcrypt.hash(pass, saltRounds);
@@ -38,11 +39,9 @@ const SaveUser = (req, res, next) => {
           Name: response.data.Name,
         };
         next();
-      }
-      else
-      {
-          console.log("Error occoured while saving user to DB", response.error);
-          next('route');
+      } else {
+        console.log("Error occoured while saving user to DB", response.error);
+        next("route");
       }
     })
     .catch((error) => {
@@ -51,8 +50,23 @@ const SaveUser = (req, res, next) => {
     });
 };
 
-router.post("/", NewUser, SaveUser, jwt.setJWT, (req,res)=>{
-  res.status(200).send(res.locals.jwt);
-});
+const startSession = (req, res) => {
+  let activeUser = {
+    Email: req.body.Email,
+    Refresh_Token: res.locals.jwt.refreshToken,
+  };
+  addSession
+    .AddSession(activeUser)
+    .then((response) => {
+      console.log(response);
+      res.status(200).send(res.locals.jwt);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(200).json("Session couldnot be started for the provided user");
+    });
+};
+
+router.post("/", NewUser, SaveUser, jwt.setJWT, startSession);
 
 module.exports = router;
