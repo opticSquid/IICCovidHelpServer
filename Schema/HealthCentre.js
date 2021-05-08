@@ -19,6 +19,7 @@ let HeathCentre = new schema(
       type: String,
       required: true,
     },
+    PhoneNumber:String,
     Beds: {
       Normal: String,
       ICU: String,

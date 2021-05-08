@@ -12,14 +12,14 @@ const prod_config = {
   origin: "",
 };
 const LogOptions = {
-  basePath: 'Logs',
-  fileName: 'Server.log',
+  basePath: "Logs",
+  fileName: "Server.log",
   ip: true,
-  showOnConsole: true
-}
+  showOnConsole: true,
+};
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-require('express-file-logger')(app, LogOptions);
+require("express-file-logger")(app, LogOptions);
 //app.use(cors(process.env.NODE_ENV === "production" ? prod_config : dev_config));
 app.use(cors());
 const port = process.env.PORT || 5000;
@@ -31,18 +31,20 @@ mongoose
   })
   .then((connection) => {
     app.get("/", (req, res) => {
-      res.status(200).json({m:"Hello from myBondhu Backend"});
+      res.status(200).json({ m: "Hello from myBondhu Backend" });
     });
-    app.use("/generateotp",require("./Routes/OTPgenerate"));
+    app.use("/generateotp", require("./Routes/OTPgenerate"));
     app.use("/otpconfirm", require("./Routes/OTPconfirm"));
     app.use("/state", require("./Routes/getStates"));
     app.use("/district", require("./Routes/getDistricts"));
     app.use("/slots", require("./Routes/getVaccineSlots"));
-    app.use("/signup",require("./Routes/Signup"));
-    app.use("/login",require("./Routes/Login"));
-    app.use("/logout",require("./Routes/Logout"));
-  }).catch((error)=>{
-    console.log("Could not connect to Database, this error occured=>\n",error);
+    app.use("/signup", require("./Routes/Signup"));
+    app.use("/login", require("./Routes/Login"));
+    app.use("/logout", require("./Routes/Logout"));
+    app.use("/generatetoken", require("./Routes/generateAccessToken"));
+  })
+  .catch((error) => {
+    console.log("Could not connect to Database, this error occured=>\n", error);
   });
 
 app.listen(port, () => console.log(`Server Running on port ${port}`));
