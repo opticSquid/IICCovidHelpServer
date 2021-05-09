@@ -7,12 +7,30 @@ const newHealthCentre = (req,res,next) =>{
     console.log("Data that came: ", body);
     console.log("User that requested: ", res.locals.user);
     body.CreatorEmail = res.locals.user.Email;
-    body.Oxygen = parseInt(body.Oxygen);
-    body.PhoneNumber = parseInt(body.PhoneNumber);
-    body.Beds.ICU = parseInt(body.Beds.ICU);
-    body.Beds.Normal = parseInt(body.Beds.Normal);
-    body.CovidVaccines.Quantity = parseInt(body.CovidVaccines.Quantity);
-    body.Doctors = parseInt(body.Doctors);
+    if(body.Oxygen!==NaN)
+    {
+        body.Oxygen = parseInt(body.Oxygen);
+    }
+    if(body.PhoneNumber!==NaN)
+    {
+        body.PhoneNumber = parseInt(body.PhoneNumber);
+    }
+    if(body.Beds.ICU!==NaN)
+    {
+        body.Beds.ICU = parseInt(body.Beds.ICU);
+    }
+    if(body.Beds.Normal!==NaN)
+    {
+        body.Beds.Normal = parseInt(body.Beds.Normal);
+    }
+    if(body.CovidVaccines.Quantity!==NaN)
+    {
+        body.CovidVaccines.Quantity = parseInt(body.CovidVaccines.Quantity);
+    }
+    if(body.Doctors!==NaN)
+    {
+        body.Doctors = parseInt(body.Doctors);
+    }
     //Check wheather body has an uid key
     if(!body.uid)
     {
