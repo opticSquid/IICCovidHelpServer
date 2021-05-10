@@ -36,7 +36,7 @@ const newHealthCentre = (req,res,next) =>{
     {
         body.uid = uuidv4();
     }
-    console.log("FInal body to add to DB\n", body);
+    console.log("Final body to add to DB\n", body);
     addCentre.AddCenter(body).then((response)=>{
         console.log("Saved new centre",response);
         res.status(200).json({status: "New Health Centre Added to DB"});

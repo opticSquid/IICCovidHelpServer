@@ -8,7 +8,7 @@ const SetJWT = (req, res,next) => {
   const accessToken = jwt.sign(res.locals.usertoSend, process.env.ACCESSTOKEN, {
     expiresIn: 900,
   });
-  res.locals.jwt = { refreshToken: refreshToken, accessToken: accessToken };
+  res.locals.jwt = { refreshToken: refreshToken, accessToken: accessToken, Name: res.locals.VerifiedUser.Name };
   next();
 };
 
@@ -25,4 +25,18 @@ const VerifyJWT = (req, res, next) => {
   }
 };
 
-module.exports = { setJWT: SetJWT, verifyJWT: VerifyJWT };
+const verifyUser = (req,res,next) => {
+  try {
+    console.log("Request Params: ",req.params);
+    let user = jwt.verify(req.params.token, process.env.EMAILTOKEN);
+    console.log("Email Verified", user);
+    res.locals.VerifiedUser = {Email: user.Email, Name: user.Name, Password: user.Password};
+    next();
+  } catch (error) {
+    console.error("Email token is tampered\n", error);
+    next("route");
+    res.status(200).json({ status: "Email verification link has been tampered with" });
+  }
+}
+
+module.exports = { setJWT: SetJWT, verifyJWT: VerifyJWT, VerifyUser: verifyUser };

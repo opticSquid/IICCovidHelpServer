@@ -1,72 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("../MiddleWares/JWT");
-const addUser = require("../Database/NewUser");
-const addSession = require("../Database/AddSession");
-const hashPassword = async (pass) => {
-  const saltRounds = 10;
-  const hash = await bcrypt.hash(pass, saltRounds);
-  return hash;
-};
-
-const NewUser = (req, res, next) => {
-  const body = req.body;
-  hashPassword(body.Password)
-    .then((hash) => {
-      res.locals.passHash = hash;
-      next();
-    })
-    .catch((error) => {
-      console.log("Could not generate hash for the given passwords");
-      next("route");
-    });
-};
-
-const SaveUser = (req, res, next) => {
-  let User = {
-    Email: req.body.Email,
-    Name: req.body.Name,
-    Password: res.locals.passHash,
-  };
-  addUser
-    .AddUser(User)
-    .then((response) => {
-      console.log("From DB", response);
-      if (response.error === null) {
-        res.locals.usertoSend = {
-          Email: response.data.Email,
-          Name: response.data.Name,
-        };
-        next();
-      } else {
-        console.log("Error occoured while saving user to DB", response.error);
-        next("route");
+const router = require("express").Router();
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+const sendMail = async (Email,Name,Password) => {
+    let mailRoute = jwt.sign({Email: Email,Name: Name, Password: Password},process.env.EMAILTOKEN,{expiresIn:900});
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      host: "smtp.gmail.com",
+      auth: {
+        user: process.env.EmailSender,
+        pass: process.env.AppPassword
       }
-    })
-    .catch((error) => {
-      console.log("Promise of saving User to Database got Rejected", error);
-      next("route");
     });
-};
-
-const startSession = (req, res) => {
-  let activeUser = {
-    Email: req.body.Email,
-    Refresh_Token: res.locals.jwt.refreshToken,
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"myBondhu Portal" <soumalyabhattacharya6@gmail.com>', // sender address
+      to: Email, // list of receivers
+      subject: "Verification Mail from myBondhu", // Subject line
+      html: `<b>
+      Hello ${Name},
+      </b>
+      <div>
+      <p>
+      This mail is sent to you from myBondhu Portal to verify your mail address. This verification Link will be active for 15 minutes. 
+      </p>
+      <a href=${process.env.Origin}/confirmEmail/${mailRoute} style="text-decoration: none"><button style="background-color:purple">Click this button to verify your mail</button></a>
+      </div>`, // html body
+    });
+  
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    
+    return {
+      MessageSent: info.messageId,
+      PreviewURL: nodemailer.getTestMessageUrl(info),
+    };
   };
-  addSession
-    .AddSession(activeUser)
-    .then((response) => {
-      console.log(response);
-      res.status(200).send(res.locals.jwt);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(200).json("Session couldnot be started for the provided user");
+  
+const sendVerificationEmail = (req, res) => {
+    sendMail(req.body.Email,req.body.Name, req.body.Password).then((response) => {
+      console.log("Response: ",response);
+      res.status(200).json({status: "Mail sent yet to be verified"});
+    }).catch((error)=>{
+      if(error)
+      {
+        console.error("Error came while sending Email",error);
+        res.status(200).json({status: "Mail could not be sent to the provided mail address"});
+      }
     });
-};
-
-router.post("/", NewUser, SaveUser, jwt.setJWT, startSession);
+  };
+router.post(
+  "/",
+  sendVerificationEmail
+);
 
 module.exports = router;
