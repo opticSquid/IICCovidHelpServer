@@ -68,7 +68,7 @@ const startSession = (req, res) => {
     .AddSession(activeUser)
     .then((response) => {
       console.log(response);
-      res.status(200).send(res.locals.jwt);
+      res.status(200).send({status: "Logged in successfully" ,tokens: res.locals.jwt});
     })
     .catch((err) => {
       console.error(err);
