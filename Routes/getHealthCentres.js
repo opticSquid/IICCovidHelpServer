@@ -17,6 +17,6 @@ const getHealthCentres = (req, res) => {
     });
 };
 
-router.get("/", getHealthCentres);
+router.post("/", getHealthCentres);
 
 module.exports = router;
