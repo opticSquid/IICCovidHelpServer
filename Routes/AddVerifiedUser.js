@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
+const app = require("express");
+const router = app.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("../MiddleWares/JWT");
 const addUser = require("../Database/NewUser");
-const addSession = require("../Database/AddSession");
 
 const hashPassword = async (pass) => {
   const saltRounds = 10;
@@ -24,7 +23,7 @@ const NewUser = (req, res, next) => {
     });
 };
 
-const SaveUser = (req, res, next) => {
+const SaveUser = (req, res) => {
   let User = {
     Email: res.locals.VerifiedUser.Email,
     Name: res.locals.VerifiedUser.Name,
@@ -39,42 +38,22 @@ const SaveUser = (req, res, next) => {
           Email: response.data.Email,
           Name: response.data.Name,
         };
-        next();
+        res.render('confirm',{Name: response.data.Name, Email: response.data.Email});
       } else {
         console.log("Error occoured while saving user to DB", response.error);
-        next("route");
       }
     })
     .catch((error) => {
       console.log("Promise of saving User to Database got Rejected", error);
-      next("route");
     });
 };
 
-const startSession = (req, res) => {
-  let activeUser = {
-    Email: res.locals.VerifiedUser.Email,
-    Refresh_Token: res.locals.jwt.refreshToken,
-  };
-  addSession
-    .AddSession(activeUser)
-    .then((response) => {
-      console.log(response);
-      res.status(200).send(res.locals.jwt);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(200).json("Session couldnot be started for the provided user");
-    });
-};
 
 router.get(
   "/:token",
   jwt.VerifyUser,
   NewUser,
   SaveUser,
-  jwt.SetJWT_SignUP,
-  startSession
 );
 
 module.exports = router;

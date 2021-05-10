@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const hbs = require("express-handlebars");
 const app = express();
 
 const dev_config = {
@@ -17,6 +18,15 @@ const LogOptions = {
   ip: true,
   showOnConsole: true,
 };
+app.set("view engine", "hbs");
+app.engine(
+  "hbs",
+  hbs({
+    extname: "hbs",
+    layoutsDir: __dirname + "/Views",
+    defaultLayout: "confirm",
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
@@ -39,12 +49,12 @@ mongoose
     // app.use("/district", require("./Routes/getDistricts"));
     // app.use("/slots", require("./Routes/getVaccineSlots"));
     app.use("/signup", require("./Routes/Signup"));
-    app.use("/confirmEmail",require("./Routes/AddVerifiedUser"));
+    app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
     app.use("/login", require("./Routes/Login"));
     app.use("/logout", require("./Routes/Logout"));
     app.use("/generatetoken", require("./Routes/generateAccessToken"));
-    app.use("/newHealthCentre",require("./Routes/NewHealthCentre"));
-    app.use("/getHealthCentres",require("./Routes/getHealthCentres"));
+    app.use("/newHealthCentre", require("./Routes/NewHealthCentre"));
+    app.use("/getHealthCentres", require("./Routes/getHealthCentres"));
   })
   .catch((error) => {
     console.log("Could not connect to Database, this error occured=>\n", error);
