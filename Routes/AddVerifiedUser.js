@@ -11,7 +11,7 @@ const hashPassword = async (pass) => {
   return hash;
 };
 
-const NewUser = (req, res,next) => {
+const NewUser = (req, res, next) => {
   const body = res.locals.VerifiedUser;
   hashPassword(body.Password)
     .then((hash) => {
@@ -53,7 +53,7 @@ const SaveUser = (req, res, next) => {
 
 const startSession = (req, res) => {
   let activeUser = {
-    Email:  res.locals.VerifiedUser.Email,
+    Email: res.locals.VerifiedUser.Email,
     Refresh_Token: res.locals.jwt.refreshToken,
   };
   addSession
@@ -68,6 +68,13 @@ const startSession = (req, res) => {
     });
 };
 
-router.get("/:token", jwt.VerifyUser, NewUser, SaveUser, jwt.setJWT, startSession);
+router.get(
+  "/:token",
+  jwt.VerifyUser,
+  NewUser,
+  SaveUser,
+  jwt.SetJWT_SignUP,
+  startSession
+);
 
 module.exports = router;

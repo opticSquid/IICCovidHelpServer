@@ -45,6 +45,7 @@ const verifypass = (req, res, next) => {
           Email: req.body.Email,
           Name: res.locals.user.Name,
         };
+        console.log("User to send", res.locals.usertoSend);
         next();
       } else {
         next("route");
@@ -75,5 +76,5 @@ const startSession = (req, res) => {
     });
 };
 
-router.post("/", login, verifypass, jwt.setJWT, startSession);
+router.post("/", login, verifypass, jwt.SetJWT_Login, startSession);
 module.exports = router;
