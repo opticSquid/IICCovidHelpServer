@@ -19,15 +19,15 @@ const LogOptions = {
   showOnConsole: true,
 };
 app.set("view engine", "hbs");
+app.use(express.static(__dirname +'/public'));
 app.engine(
   "hbs",
   hbs({
     extname: "hbs",
-    layoutsDir: __dirname + "/Views",
+    layoutsDir: __dirname + '/views',
     defaultLayout: "index",
   })
 );
-app.use(express.static(__dirname +'./Static'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
@@ -53,6 +53,7 @@ mongoose
     app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
     app.use("/login", require("./Routes/Login"));
     app.use("/logout", require("./Routes/Logout"));
+    app.use("/checktoken",require("./Routes/checkToken"));
     app.use("/generatetoken", require("./Routes/generateAccessToken"));
     app.use("/newHealthCentre", require("./Routes/NewHealthCentre"));
     app.use("/getHealthCentres", require("./Routes/getHealthCentres"));

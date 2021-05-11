@@ -2,7 +2,7 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const findSession = require("../Database/FindSession");
 const checkSession = (req, res, next) => {
-  console.log("token:",req.headers.refreshtoken);
+  console.log(" refresh token in refresh:",req.headers.refreshtoken);
   let refreshToken = req.headers.refreshtoken;
   let user = jwt.verify(refreshToken, process.env.REFRESHTOKEN);
   findSession
