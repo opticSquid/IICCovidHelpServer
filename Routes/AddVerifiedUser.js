@@ -38,7 +38,7 @@ const SaveUser = (req, res) => {
           Email: response.data.Email,
           Name: response.data.Name,
         };
-        res.render('confirm',{Name: response.data.Name, Email: response.data.Email});
+        res.render('index',{Name: response.data.Name, Email: response.data.Email});
       } else {
         console.log("Error occoured while saving user to DB", response.error);
       }

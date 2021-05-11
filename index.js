@@ -24,9 +24,10 @@ app.engine(
   hbs({
     extname: "hbs",
     layoutsDir: __dirname + "/Views",
-    defaultLayout: "confirm",
+    defaultLayout: "index",
   })
 );
+app.use(express.static(__dirname +'./Static'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
