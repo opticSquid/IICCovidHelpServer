@@ -18,8 +18,8 @@ const LogOptions = {
   ip: true,
   showOnConsole: true,
 };
+//app.set('views', __dirname + '/views');
 app.set("view engine", "hbs");
-app.use(express.static(__dirname +'/public'));
 app.engine(
   "hbs",
   hbs({
@@ -28,6 +28,10 @@ app.engine(
     defaultLayout: "main",
   })
 );
+// app.engine('handlebars', handlebars({
+//   layoutsDir: __dirname + '/views/layouts',
+//   }));
+  app.use(express.static(__dirname +'/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
