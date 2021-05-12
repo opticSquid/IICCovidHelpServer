@@ -24,7 +24,7 @@ app.engine(
   "hbs",
   hbs({
     extname: "hbs",
-    layoutsDir: (__dirname + '/Menu'),
+    layoutsDir: (__dirname + '/views/views'),
     defaultLayout: "main",
   })
 );
