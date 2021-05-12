@@ -24,8 +24,8 @@ app.engine(
   "hbs",
   hbs({
     extname: "hbs",
-    layoutsDir: __dirname + '/Views',
-    defaultLayout: "index",
+    layoutsDir: (__dirname + '/Menu'),
+    defaultLayout: "main",
   })
 );
 app.use(express.json());
