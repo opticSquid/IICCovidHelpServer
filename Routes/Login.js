@@ -48,13 +48,11 @@ const verifypass = (req, res, next) => {
         console.log("User to send", res.locals.usertoSend);
         next();
       } else {
-        next("route");
         res.status(200).json({ status: "Password Didn't match" });
       }
     })
     .catch((error) => {
       console.error("Error while comparing Passwords", error);
-      next("route");
       res.status(200).json({ status: "Password could not be compared" });
     });
 };

@@ -27,6 +27,7 @@ const genAccessToken = (req, res) => {
   let accessToken = jwt.sign(res.locals.activeUser, process.env.ACCESSTOKEN, {
     expiresIn: 900,
   });
+  console.log("New Access token for refresh token ", req.headers.refreshtoken, " is ",accessToken);
   res.status(200).json({ accessToken: accessToken });
 };
 router.get("/", checkSession, genAccessToken);
