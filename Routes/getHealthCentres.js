@@ -3,7 +3,9 @@ const findHealthCentre = require("../Database/HealthCentre");
 const getHealthCentres = (req, res) => {
   let body = req.body;
   //let doc = {Location: <Location/>, Radius: <Radius/> SortBy: <Sortby/>}
-  findHealthCentre
+  if(body.Radius!==NaN)
+  {
+    findHealthCentre
     .GetNearbyCenter(body.Location, parseInt(body.Radius), body.SortBy)
     .then((response) => {
 
@@ -14,6 +16,11 @@ const getHealthCentres = (req, res) => {
       console.log("Find Centres query returned an Error", error);
       res.status(200).json({ Centres: null });
     });
+  }
+  else
+  {
+    res.status(200).json({Centres: null, status: "Given search Radius not a number"});
+  }
 };
 
 router.post("/", getHealthCentres);
