@@ -25,7 +25,6 @@ let HeathCentre = new schema(
     },
     Email: {
       type: String,
-      unique: true,
     },
     PhoneNumber: {
       type: Number,
