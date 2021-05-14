@@ -23,9 +23,7 @@ let HeathCentre = new schema(
       type: String,
       required: true,
     },
-    Email: {
-      type: String,
-    },
+    Email: String,
     PhoneNumber: {
       type: Number,
       required: true,
