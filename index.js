@@ -9,8 +9,7 @@ const dev_config = {
   origin: "http://localhost:3000",
 };
 const prod_config = {
-  //   origin: "https://brave-hopper-919f2d.netlify.app",
-  origin: "",
+   origin: "https://www.mybondhu.in",
 };
 const LogOptions = {
   basePath: "Logs",
@@ -31,8 +30,7 @@ app.engine(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
-//app.use(cors(process.env.NODE_ENV === "production" ? prod_config : dev_config));
-app.use(cors());
+app.use(cors(process.env.NODE_ENV === "production" ? prod_config : dev_config));
 const port = process.env.PORT || 5000;
 mongoose
   .connect(process.env.DBURI, {
