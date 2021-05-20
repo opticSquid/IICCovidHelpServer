@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const verifyjwt = require("../MiddleWares/JWT");
-const deleteSession = require("../Database/DeleteActiveUser");
+const deleteSession = require("../Database/Session");
 const logout = (req, res) => {
   deleteSession
     .DeleteUser(res.locals.user.Email)

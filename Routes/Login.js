@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require("../MiddleWares/JWT");
-const findUser = require("../Database/FindUser");
-const addSession = require("../Database/AddSession");
+const findUser = require("../Database/User");
+const addSession = require("../Database/Session");
 const login = (req, res, next) => {
   findUser
     .FindUser(req.body.Email)

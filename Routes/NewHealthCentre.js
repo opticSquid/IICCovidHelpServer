@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { v4: uuidv4 } = require("uuid");
 const verifyjwt = require("../MiddleWares/JWT");
 const addCentre = require("../Database/HealthCentre");
-const e = require("express");
 const newHealthCentre = (req, res, next) => {
   let body = req.body;
   console.log("Data that came: ", body);
@@ -46,8 +45,29 @@ const newHealthCentre = (req, res, next) => {
     body.uid = uuidv4();
   }
   console.log("Final body to add to DB\n", body);
+  res.locals.body = body;
+  next();
+};
+
+//To avoid redundancy
+const checkforExistingFacility = (req, res, next) => {
+  //Check if the hospital already exists in database
   addCentre
-    .AddCenter(body)
+    .checkExisting(res.locals.body.Address.Location)
+    .then((response) => {
+      // Promise can be resolved in one condition only
+      console.log("If facility was not found", response);
+      next();
+    })
+    .catch((error) => {
+      console.error("check for existing facility returned an error", error);
+      res.status(200).json({ status: error.status, error: error.error });
+    });
+};
+
+const addNewCentre = (req, res) => {
+  addCentre
+    .AddCenter(res.locals.body)
     .then((response) => {
       console.log("Saved new centre", response);
       res.status(200).json({ status: "New Health Centre Added to DB" });
@@ -60,6 +80,12 @@ const newHealthCentre = (req, res, next) => {
     });
 };
 
-router.post("/", verifyjwt.verifyJWT, newHealthCentre);
+router.post(
+  "/",
+  verifyjwt.verifyJWT,
+  newHealthCentre,
+  checkforExistingFacility,
+  addNewCentre
+);
 
 module.exports = router;

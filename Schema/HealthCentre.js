@@ -41,6 +41,10 @@ let HeathCentre = new schema(
     },
     Doctors: Number,
     Address: {
+      // Location: {
+      //   type: "Point",
+      //   coordinates: [longitude,latitude],
+      // },
       Location: {
         type: {
           type: String,
@@ -60,6 +64,7 @@ let HeathCentre = new schema(
       type: [Review],
     },
   },
+  //TimeStamps will  be autometically created when data is new data is created or existing data is updated through backend route
   { timestamps: true }
 );
 HeathCentre.index({ "Address.Location": "2dsphere" });

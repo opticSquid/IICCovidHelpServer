@@ -2,7 +2,7 @@ const app = require("express");
 const router = app.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("../MiddleWares/JWT");
-const addUser = require("../Database/NewUser");
+const addUser = require("../Database/User");
 
 const hashPassword = async (pass) => {
   const saltRounds = 10;

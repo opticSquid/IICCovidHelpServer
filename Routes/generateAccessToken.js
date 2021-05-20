@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const findSession = require("../Database/FindSession");
+const findSession = require("../Database/Session");
 const checkSession = (req, res, next) => {
   console.log(" refresh token in refresh:",req.headers.refreshtoken);
   let refreshToken = req.headers.refreshtoken;

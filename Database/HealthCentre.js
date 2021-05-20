@@ -77,4 +77,40 @@ const getNearbyCentres = (location, radius, sortBy) => {
   });
 };
 
-module.exports = { AddCenter: addCenter, GetNearbyCenter: getNearbyCentres };
+const checkforExistingFacility = (loc) => {
+  // Check if a facility exists in the given
+  return new Promise((resolve, reject) => {
+    healthCentre.find({ "Address.Location": loc }).exec((err, facility) => {
+      // If some error occoured
+      if (err)
+        reject({
+          status: "Finding existing health centre query cannot be performed",
+          facility: null,
+          error: err,
+        });
+      else {
+        // If no facility was found in the given location
+        if (facility.length === 0) {
+          return resolve({
+            status: "New Facility can be Added in this location",
+            facility: null,
+            error: null,
+          });
+        } else {
+          // If an existing facility was found
+          return reject({
+            status: "An existing facility was found in this location",
+            facility: facility,
+            error: null,
+          });
+        }
+      }
+    });
+  });
+};
+
+module.exports = {
+  AddCenter: addCenter,
+  GetNearbyCenter: getNearbyCentres,
+  checkExisting: checkforExistingFacility,
+};
