@@ -16,7 +16,7 @@ const login = (req, res, next) => {
         console.error("Could not find user from DB", response);
         // Name and password is passed to next middleware
         next("route");
-        res.status(200).json("User doesn't Exist");
+        res.status(200).json({status: "User doesn't Exist", tokens: null});
       }
     })
     .catch((error) => {
@@ -25,7 +25,7 @@ const login = (req, res, next) => {
         error
       );
       next("route");
-      res.status(200).json("Could not issue Find Command");
+      res.status(200).json({status: "Could not issue Find Command in DB internal Server error", tokens: null});
     });
 };
 const comparepass = async (password, hash) => {
@@ -48,12 +48,12 @@ const verifypass = (req, res, next) => {
         console.log("User to send", res.locals.usertoSend);
         next();
       } else {
-        res.status(200).json({ status: "Password Didn't match" });
+        res.status(200).json({ status: "Incorrect Password", tokens: null });
       }
     })
     .catch((error) => {
       console.error("Error while comparing Passwords", error);
-      res.status(200).json({ status: "Password could not be compared" });
+      res.status(200).json({ status: "Password could not be compared", tokens: null });
     });
 };
 
@@ -66,11 +66,11 @@ const startSession = (req, res) => {
     .AddSession(activeUser)
     .then((response) => {
       console.log(response);
-      res.status(200).send({status: "Logged in successfully" ,tokens: res.locals.jwt});
+      res.status(200).json({status: "Logged in successfully" ,tokens: res.locals.jwt});
     })
     .catch((err) => {
       console.error(err);
-      res.status(200).json("Session couldnot be started for the provided user");
+      res.status(200).json({status: "Session couldnot be started, User is logged in from another Device", tokens: null});
     });
 };
 

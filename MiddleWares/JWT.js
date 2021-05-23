@@ -38,7 +38,7 @@ const VerifyJWT = (req, res, next) => {
     res.locals.user = { Email: user.Email, Name: user.Name };
     next();
   } catch (error) {
-    console.error("Access Token Expired\n", error);
+    console.error("Access Token Expired");
     next("route");
     res.status(200).json({ m: "Access Token Expired" });
   }
@@ -56,11 +56,8 @@ const verifyUser = (req, res, next) => {
     };
     next();
   } catch (error) {
-    console.error("Email token is tampered\n", error);
-    next("route");
-    res
-      .status(200)
-      .json({ status: "Email verification link has been tampered with" });
+    console.error("Email token is tampered");
+    res.render("EmailjwtTampered");
   }
 };
 

@@ -7,46 +7,50 @@ const newHealthCentre = (req, res, next) => {
   console.log("Data that came: ", body);
   console.log("User that requested: ", res.locals.user);
   body.CreatorEmail = res.locals.user.Email;
-  if (body.Oxygen !== NaN && body.Oxygen !== "") {
-    body.Oxygen = parseInt(body.Oxygen);
-  } else {
-    body.Oxygen = 0;
-  }
-  if (body.PhoneNumber !== NaN && body.PhoneNumber !== "") {
-    body.PhoneNumber = parseInt(body.PhoneNumber);
-  } else {
-    body.PhoneNumber = 0;
-  }
-  if (body.Beds.ICU !== NaN && body.Beds.ICU !== "") {
-    body.Beds.ICU = parseInt(body.Beds.ICU);
-  } else {
-    body.Beds.ICU = 0;
-  }
-  if (body.Beds.Normal !== NaN && body.Beds.Normal !== "") {
-    body.Beds.Normal = parseInt(body.Beds.Normal);
-  } else {
-    body.Beds.Normal = 0;
-  }
   if (
-    body.CovidVaccines.Quantity !== NaN &&
-    body.CovidVaccines.Quantity !== ""
+    body.FacilityName !== "" &&
+    body.PhoneNumber !== "" &&
+    body.Address.Location !== undefined
   ) {
-    body.CovidVaccines.Quantity = parseInt(body.CovidVaccines.Quantity);
+    // If body has all the minimum required values
+    if (body.Oxygen !== NaN && body.Oxygen !== "") {
+      body.Oxygen = parseInt(body.Oxygen);
+    } else {
+      body.Oxygen = 0;
+    }
+    if (body.Beds.ICU !== NaN && body.Beds.ICU !== "") {
+      body.Beds.ICU = parseInt(body.Beds.ICU);
+    } else {
+      body.Beds.ICU = 0;
+    }
+    if (body.Beds.Normal !== NaN && body.Beds.Normal !== "") {
+      body.Beds.Normal = parseInt(body.Beds.Normal);
+    } else {
+      body.Beds.Normal = 0;
+    }
+    if (
+      body.CovidVaccines.Quantity !== NaN &&
+      body.CovidVaccines.Quantity !== ""
+    ) {
+      body.CovidVaccines.Quantity = parseInt(body.CovidVaccines.Quantity);
+    } else {
+      body.CovidVaccines.Quantity = 0;
+    }
+    if (body.Doctors !== NaN && body.Doctors !== "") {
+      body.Doctors = parseInt(body.Doctors);
+    } else {
+      body.Doctors = 0;
+    }
+    //Check wheather body has an uid key
+    if (!body.uid) {
+      body.uid = uuidv4();
+    }
+    console.log("Final body to add to DB\n", body);
+    res.locals.body = body;
+    next();
   } else {
-    body.CovidVaccines.Quantity = 0;
+    res.status(200).json({status:"Hospital Name, Phone Number or Location is missing"});
   }
-  if (body.Doctors !== NaN && body.Doctors !== "") {
-    body.Doctors = parseInt(body.Doctors);
-  } else {
-    body.Doctors = 0;
-  }
-  //Check wheather body has an uid key
-  if (!body.uid) {
-    body.uid = uuidv4();
-  }
-  console.log("Final body to add to DB\n", body);
-  res.locals.body = body;
-  next();
 };
 
 //To avoid redundancy
@@ -61,7 +65,7 @@ const checkforExistingFacility = (req, res, next) => {
     })
     .catch((error) => {
       console.error("check for existing facility returned an error", error);
-      res.status(200).json({ status: error.status, error: error.error });
+      res.status(200).json({ status: error.status });
     });
 };
 
@@ -76,7 +80,7 @@ const addNewCentre = (req, res) => {
       console.error("New health Centre could not be added=>", error);
       res
         .status(200)
-        .json({ status: "New Health Centre could not be Added to DB" });
+        .json({ status: "New Centre could not be added to DB" });
     });
 };
 

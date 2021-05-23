@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const hbs = require("express-handlebars");
+const handlebars = require("express-handlebars");
 const app = express();
 
 const dev_config = {
@@ -20,10 +20,10 @@ const LogOptions = {
 app.set("view engine", "hbs");
 app.engine(
   "hbs",
-  hbs({
+  handlebars({
     extname: "hbs",
-    layoutsDir: (__dirname + '/views'),
-    defaultLayout: "main",
+    layoutsDir: `${__dirname}/views/layouts`,
+     defaultLayout: "main",
   })
 );
   app.use(express.static(__dirname +'/public'));

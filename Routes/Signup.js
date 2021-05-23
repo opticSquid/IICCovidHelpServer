@@ -27,7 +27,7 @@ const sendMail = async (Email, Name, Password) => {
       <p>
       This mail is sent to you from myBondhu Portal to verify your mail address. This verification Link will be active for <strong>15 minutes</strong>. 
       </p>
-      <a href=${process.env.Origin}/confirmEmail/${mailRoute} style="text-decoration: none"><button style="background-color:purple; color:white">Click this button to verify your mail</button></a>
+      <a href=http://localhost:5000/confirmEmail/${mailRoute} style="text-decoration: none"><button style="background-color:purple; color:white">Click this button to verify your mail</button></a>
       </div>`, // html body
   });
 
@@ -52,7 +52,7 @@ const sendVerificationEmail = (req, res) => {
         res
           .status(200)
           .json({
-            status: "Mail could not be sent to the provided mail address",
+            status: "Mail could not be sent to the provided Email address",
           });
       }
     });

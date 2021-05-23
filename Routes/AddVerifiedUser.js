@@ -38,22 +38,23 @@ const SaveUser = (req, res) => {
           Email: response.data.Email,
           Name: response.data.Name,
         };
-        res.render("main",{Name: response.data.Name, Email: response.data.Email});
+        res.render("signup", {
+          Name: response.data.Name,
+          Email: response.data.Email,
+        });
       } else {
         console.log("Error occoured while saving user to DB", response.error);
       }
     })
     .catch((error) => {
-      console.log("Promise of saving User to Database got Rejected", error);
+      console.error("Promise of saving User to Database got Rejected", error);
+      res.render("failedAttempt", {
+        Name: response.data.Name,
+        Email: response.data.Email,
+      });
     });
 };
 
-
-router.get(
-  "/:token",
-  jwt.VerifyUser,
-  NewUser,
-  SaveUser,
-);
+router.get("/:token", jwt.VerifyUser, NewUser, SaveUser);
 
 module.exports = router;
