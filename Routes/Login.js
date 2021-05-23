@@ -15,7 +15,7 @@ const login = (req, res, next) => {
       } else {
         console.error("Could not find user from DB", response);
         // Name and password is passed to next middleware
-        next("route");
+        
         res.status(200).json({status: "User doesn't Exist", tokens: null});
       }
     })
@@ -24,7 +24,7 @@ const login = (req, res, next) => {
         "Could not issue Find Command to DB This error occoured\n",
         error
       );
-      next("route");
+      
       res.status(200).json({status: "Could not issue Find Command in DB internal Server error", tokens: null});
     });
 };

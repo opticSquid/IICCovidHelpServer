@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const user = require("../Database/User");
 const sendMail = async (Email, Name, Password) => {
   let mailRoute = jwt.sign(
     { Email: Email, Name: Name, Password: Password },
@@ -39,24 +40,54 @@ const sendMail = async (Email, Name, Password) => {
     PreviewURL: nodemailer.getTestMessageUrl(info),
   };
 };
-
+//check if the user already exists in DB
+const checkifExists = (req, res, next) => {
+  user
+    .FindUser(req.body.Email)
+    .then((response) => {
+      if (response.data !== undefined) {
+        console.log("Found existing user by this email in DB", response);
+        res
+          .status(200)
+          .json({
+            status:
+              "An account already exists by this email, try another account",
+          });
+      } else {
+        console.error(
+          "Could not find user from DB, new user can be created",
+          response
+        );
+        next();
+      }
+    })
+    .catch((error) => {
+      console.error(
+        "Could not issue Find Command to DB This error occoured\n",
+        error
+      );
+      next("route");
+      res.status(200).json({
+        status: "Could not issue Find Command in DB internal Server error",
+        tokens: null,
+      });
+    });
+};
 const sendVerificationEmail = (req, res) => {
   sendMail(req.body.Email, req.body.Name, req.body.Password)
     .then((response) => {
       console.log("Response: ", response);
-      res.status(200).json({ status: "Mail sent yet to be verified" });
+      res.status(200).json({ status: "Mail sent yet to be verified, remember to check your spam folder" });
     })
     .catch((error) => {
       if (error) {
         console.error("Error came while sending Email", error);
-        res
-          .status(200)
-          .json({
-            status: "Mail could not be sent to the provided Email address",
-          });
+        res.status(200).json({
+          status: "Mail could not be sent to the provided Email address",
+        });
       }
     });
 };
-router.post("/", sendVerificationEmail);
+router.post("/", checkifExists, sendVerificationEmail);
 
 module.exports = router;
