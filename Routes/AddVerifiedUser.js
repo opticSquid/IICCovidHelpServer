@@ -1,6 +1,6 @@
 const app = require("express");
 const router = app.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("../MiddleWares/JWT");
 const addUser = require("../Database/User");
 
