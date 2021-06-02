@@ -49,7 +49,9 @@ const newHealthCentre = (req, res, next) => {
     res.locals.body = body;
     next();
   } else {
-    res.status(200).json({status:"Hospital Name, Phone Number or Location is missing"});
+    res
+      .status(200)
+      .json({ status: "Hospital Name, Phone Number or Location is missing" });
   }
 };
 
@@ -78,9 +80,7 @@ const addNewCentre = (req, res) => {
     })
     .catch((error) => {
       console.error("New health Centre could not be added=>", error);
-      res
-        .status(200)
-        .json({ status: "New Centre could not be added to DB" });
+      res.status(200).json({ status: "New Centre could not be added to DB" });
     });
 };
 
