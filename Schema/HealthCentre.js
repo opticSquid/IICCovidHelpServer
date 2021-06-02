@@ -49,11 +49,12 @@ let HeathCentre = new schema(
         type: {
           type: String,
           enum: ["Point"],
+          requied: true,
         },
         coordinates: {
           type: [Number],
+          required: true,
         },
-        required: true,
       },
       StreetAddress: { State: String, District: String, City: String },
     },
