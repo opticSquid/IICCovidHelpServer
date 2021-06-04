@@ -1,0 +1,10 @@
+<div class="confirmed">
+  <div class="confirmed__text">
+    <p>Hello {{{Email}}}, Give your new Password</p>
+    <form action="/setPassword" method="POST">
+        <input type="password" id="password" name="password" placeholder="Input Password" minlength="8" required />
+        <input type="email" id="email" name="email" placeholder="Enter your Email again to validate"/>
+        <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>

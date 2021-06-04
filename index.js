@@ -9,7 +9,7 @@ const dev_config = {
   origin: "http://localhost:3000",
 };
 const prod_config = {
-   origin: "https://www.mybondhu.in",
+  origin: "https://www.mybondhu.in",
 };
 const LogOptions = {
   basePath: "Logs",
@@ -23,10 +23,10 @@ app.engine(
   handlebars({
     extname: "hbs",
     layoutsDir: `${__dirname}/views/layouts`,
-     defaultLayout: "main",
+    defaultLayout: "main",
   })
 );
-  app.use(express.static(__dirname +'/public'));
+app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
@@ -51,7 +51,10 @@ mongoose
     app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
     app.use("/login", require("./Routes/Login"));
     app.use("/logout", require("./Routes/Logout"));
-    app.use("/checktoken",require("./Routes/checkToken"));
+    app.use("/checktoken", require("./Routes/checkToken"));
+    app.use("/forgotPassword", require("./Routes/ForgotPassword"));
+    app.use("/resetPassword",require("./Routes/ResetPassword"));
+    app.use("/setPassword",require("./Routes/setPassword"));
     app.use("/generatetoken", require("./Routes/generateAccessToken"));
     app.use("/newHealthCentre", require("./Routes/NewHealthCentre"));
     app.use("/getHealthCentres", require("./Routes/getHealthCentres"));
