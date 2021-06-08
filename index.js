@@ -42,11 +42,11 @@ mongoose
     app.get("/", (req, res) => {
       res.status(200).json({ m: "Hello from myBondhu Backend" });
     });
-    // app.use("/generateotp", require("./Routes/OTPgenerate"));
-    // app.use("/otpconfirm", require("./Routes/OTPconfirm"));
-    // app.use("/state", require("./Routes/getStates"));
-    // app.use("/district", require("./Routes/getDistricts"));
-    // app.use("/slots", require("./Routes/getVaccineSlots"));
+    app.use("/generateotp", require("./Routes/OTPgenerate"));
+    app.use("/otpconfirm", require("./Routes/OTPconfirm"));
+    app.use("/state", require("./Routes/getStates"));
+    app.use("/district", require("./Routes/getDistricts"));
+    app.use("/slots", require("./Routes/getVaccineSlots"));
     app.use("/signup", require("./Routes/Signup"));
     app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
     app.use("/login", require("./Routes/Login"));
