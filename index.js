@@ -30,7 +30,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
-app.use(cors(process.env.NODE_ENV === "production" ? prod_config : dev_config));
+app.use(cors());
 const port = process.env.PORT || 5000;
 mongoose
   .connect(process.env.DBURI, {
