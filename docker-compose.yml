@@ -1,0 +1,10 @@
+version: '2'
+
+services: 
+    server:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        container_name: mybondhu_server
+        ports: 
+            - "8080:5000"
