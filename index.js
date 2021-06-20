@@ -32,35 +32,32 @@ app.use(express.urlencoded({ extended: true }));
 require("express-file-logger")(app, LogOptions);
 app.use(cors());
 const port = process.env.PORT || 5000;
-mongoose
-  .connect(process.env.DBURI, {
+app.get("/", (req, res) => {
+  res.status(200).json({ m: "Hello from myBondhu Backend" });
+});
+app.use("/generateotp", require("./Routes/OTPgenerate"));
+app.use("/otpconfirm", require("./Routes/OTPconfirm"));
+app.use("/state", require("./Routes/getStates"));
+app.use("/district", require("./Routes/getDistricts"));
+app.use("/slots", require("./Routes/getVaccineSlots"));
+app.use("/signup", require("./Routes/Signup"));
+app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
+app.use("/login", require("./Routes/Login"));
+app.use("/logout", require("./Routes/Logout"));
+app.use("/checktoken", require("./Routes/checkToken"));
+app.use("/forgotPassword", require("./Routes/ForgotPassword"));
+app.use("/resetPassword", require("./Routes/ResetPassword"));
+app.use("/setPassword", require("./Routes/setPassword"));
+app.use("/generatetoken", require("./Routes/generateAccessToken"));
+app.use("/newHealthCentre", require("./Routes/NewHealthCentre"));
+app.use("/getHealthCentres", require("./Routes/getHealthCentres"));
+
+app.listen(port, async () => {
+  console.log(`Server Running on port ${port}`);
+  await mongoose.connect(process.env.DBURI, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  })
-  .then((connection) => {
-    app.get("/", (req, res) => {
-      res.status(200).json({ m: "Hello from myBondhu Backend" });
-    });
-    app.use("/generateotp", require("./Routes/OTPgenerate"));
-    app.use("/otpconfirm", require("./Routes/OTPconfirm"));
-    app.use("/state", require("./Routes/getStates"));
-    app.use("/district", require("./Routes/getDistricts"));
-    app.use("/slots", require("./Routes/getVaccineSlots"));
-    app.use("/signup", require("./Routes/Signup"));
-    app.use("/confirmEmail", require("./Routes/AddVerifiedUser"));
-    app.use("/login", require("./Routes/Login"));
-    app.use("/logout", require("./Routes/Logout"));
-    app.use("/checktoken", require("./Routes/checkToken"));
-    app.use("/forgotPassword", require("./Routes/ForgotPassword"));
-    app.use("/resetPassword",require("./Routes/ResetPassword"));
-    app.use("/setPassword",require("./Routes/setPassword"));
-    app.use("/generatetoken", require("./Routes/generateAccessToken"));
-    app.use("/newHealthCentre", require("./Routes/NewHealthCentre"));
-    app.use("/getHealthCentres", require("./Routes/getHealthCentres"));
-  })
-  .catch((error) => {
-    console.log("Could not connect to Database, this error occured=>\n", error);
   });
-
-app.listen(port, () => console.log(`Server Running on port ${port}`));
+  console.log("Database connected!");
+});
