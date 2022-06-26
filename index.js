@@ -9,7 +9,7 @@ const dev_config = {
   origin: "http://localhost:3000",
 };
 const prod_config = {
-  origin: "https://www.mybondhu.in",
+  origin: "https://powerful-temple-03408.herokuapp.com",
 };
 const LogOptions = {
   basePath: "Logs",
